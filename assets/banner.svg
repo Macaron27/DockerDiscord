@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-labelledby="title desc">
+  <title id="title">DockerDiscord</title>
+  <desc id="desc">Homelab ChatOps and self-healing Discord bot: container blocks, a chat bubble with a heartbeat line and a green check.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1020"/>
+      <stop offset="1" stop-color="#151C33"/>
+    </linearGradient>
+    <radialGradient id="glowBlue" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2496ED" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#2496ED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowBlurple" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5865F2" stop-opacity="0.40"/>
+      <stop offset="1" stop-color="#5865F2" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#FFFFFF" fill-opacity="0.06"/>
+    </pattern>
+    <linearGradient id="box" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4AAAF2"/>
+      <stop offset="1" stop-color="#1D7FCC"/>
+    </linearGradient>
+    <clipPath id="frame"><rect width="1280" height="400" rx="28"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1280" height="400" fill="url(#bg)"/>
+    <rect width="1280" height="400" fill="url(#dots)"/>
+    <circle cx="950" cy="260" r="250" fill="url(#glowBlue)"/>
+    <circle cx="1156" cy="100" r="200" fill="url(#glowBlurple)"/>
+
+    <!-- Title -->
+    <text x="80" y="170" font-family="Inter, 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="84" font-weight="800" letter-spacing="-2">
+      <tspan fill="#2496ED">Docker</tspan><tspan fill="#8B94FF">Discord</tspan>
+    </text>
+    <text x="82" y="222" font-family="Inter, 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="500" fill="#C8D0E4">
+      Homelab ChatOps &amp; self-healing bot
+    </text>
+
+    <!-- Command chips -->
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="22" font-weight="600" fill="#E6EAF5">
+      <rect x="80" y="262" width="118" height="44" rx="22" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.14"/>
+      <text x="139" y="291" text-anchor="middle">/status</text>
+      <rect x="212" y="262" width="118" height="44" rx="22" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.14"/>
+      <text x="271" y="291" text-anchor="middle">/docker</text>
+      <rect x="344" y="262" width="104" height="44" rx="22" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.14"/>
+      <text x="396" y="291" text-anchor="middle">/wake</text>
+      <rect x="462" y="262" width="144" height="44" rx="22" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.14"/>
+      <text x="534" y="291" text-anchor="middle">/lockdown</text>
+    </g>
+
+    <!-- Container stack (Docker blue) -->
+    <g transform="translate(800 196)">
+      <g id="c">
+        <rect width="92" height="62" rx="10" fill="url(#box)"/>
+        <rect x="14" y="12" width="6" height="38" rx="3" fill="#FFFFFF" fill-opacity="0.35"/>
+        <rect x="30" y="12" width="6" height="38" rx="3" fill="#FFFFFF" fill-opacity="0.35"/>
+        <rect x="46" y="12" width="6" height="38" rx="3" fill="#FFFFFF" fill-opacity="0.35"/>
+        <rect x="62" y="12" width="6" height="38" rx="3" fill="#FFFFFF" fill-opacity="0.35"/>
+      </g>
+      <use href="#c" x="104"/>
+      <use href="#c" x="208"/>
+      <use href="#c" x="52" y="-74"/>
+      <use href="#c" x="156" y="-74"/>
+      <use href="#c" x="0" y="74"/>
+      <use href="#c" x="104" y="74"/>
+      <use href="#c" x="208" y="74"/>
+    </g>
+
+    <!-- Chat bubble with a heartbeat line (Discord blurple); its tail points at the stack -->
+    <g transform="translate(1064 44)">
+      <path d="M24 0 H160 A24 24 0 0 1 184 24 V88 A24 24 0 0 1 160 112 H70 L22 146 L40 112 H24 A24 24 0 0 1 0 88 V24 A24 24 0 0 1 24 0 Z" fill="#5865F2"/>
+      <polyline points="22,56 58,56 72,28 90,86 106,38 118,56 162,56" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Self-healed check -->
+    <g transform="translate(1236 152)">
+      <circle r="28" fill="#23A55A" stroke="#0B1020" stroke-width="6"/>
+      <polyline points="-12,1 -3,10 13,-8" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>
