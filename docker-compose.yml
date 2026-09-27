@@ -1,0 +1,43 @@
+# Both services use host networking:
+#  - the bot must, so Wake-on-LAN broadcasts reach the LAN (routers never forward them from a bridge);
+#  - the proxy then listens on 127.0.0.1:2375 only, reachable from this host and nothing else.
+services:
+  socket-proxy:
+    image: wollomatic/socket-proxy:1.13.1
+    restart: unless-stopped
+    network_mode: host
+    user: "65534:${DOCKER_GID:?set DOCKER_GID to the group id of /var/run/docker.sock}"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 64m
+    command:
+      - "-loglevel=info"
+      - "-listenip=127.0.0.1"
+      - "-allowfrom=127.0.0.1/32"
+      # Exactly what the bot calls, nothing more (patterns are auto-anchored with ^ and $).
+      # GET: version probe, container list/inspect/logs/stats, event stream. No archive/export/exec.
+      - '-allowGET=/(v1\.[0-9]+/)?(version|events|containers/json|containers/[a-zA-Z0-9][a-zA-Z0-9_.-]*/(json|logs|stats))'
+      # POST: stop and restart only. No create/start/exec, so a compromised bot cannot become root.
+      - '-allowPOST=/v1\.[0-9]+/containers/[a-zA-Z0-9][a-zA-Z0-9_.-]*/(stop|restart)'
+      - "-watchdoginterval=3600"
+      - "-stoponwatchdog"
+      - "-shutdowngracetime=5"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  bot:
+    build: .
+    image: dockerdiscord:1.0.0
+    restart: unless-stopped
+    network_mode: host
+    env_file: .env
+    environment:
+      DOCKER_HOST: tcp://127.0.0.1:2375
+    depends_on: [socket-proxy]
+    read_only: true
+    tmpfs: ["/tmp:size=16m"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 256m
+    pids_limit: 128

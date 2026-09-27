@@ -1,0 +1,16 @@
+# secrets: only .env.example is tracked
+.env
+
+# local environments and tool caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+.DS_Store

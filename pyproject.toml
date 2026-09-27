@@ -1,0 +1,44 @@
+[project]
+name = "dockerdiscord"
+version = "1.0.0"
+requires-python = ">=3.12"
+# Runtime deps: edit requirements.in, then regenerate the hash-locked requirements.txt (see README).
+
+[dependency-groups]  # PEP 735: `pip install --group dev` (pip >= 25.1)
+dev = [
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "ruff==0.16.9",
+    "mypy==2.3.1",
+    "types-docker==7.2.0.20260923",
+    "types-psutil==7.2.2.20260906",
+    "types-requests==2.33.0.20260906",
+    "uv==0.12.19",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# A hung await fails fast with a traceback instead of blocking the run.
+faulthandler_timeout = 10
+faulthandler_exit_on_timeout = true
+filterwarnings = [
+    "error::DeprecationWarning:bot",  # our own code must not rely on deprecated APIs
+    "ignore:'audioop' is deprecated:DeprecationWarning:discord.player",  # discord.py voice, unused
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF"]
+ignore = ["S101", "S104", "RUF001"]  # asserts for narrowing; 0.0.0.0 bind is intended (host net); emoji in strings
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S105", "S106"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+files = ["bot"]
