@@ -99,3 +99,7 @@ The automated tests fake Discord and Docker. Check these once for real:
 5. `curl -i -X POST http://<host>:8080/webhook/alert -H 'Authorization: Bearer wrong' -d '{}'` returns `401`.
 6. `/wake <host>` with the target powered off: the reply turns 🟢 once it boots.
 7. `/lockdown` in a maintenance window, then `/docker restart <name>` for each container to undo it.
+
+## License
+
+[MIT](LICENSE) © 2026 Macaron27. Dependencies keep their own licenses (MIT, Apache-2.0, BSD-3-Clause, PSF-2.0, MPL-2.0).

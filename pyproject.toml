@@ -2,6 +2,7 @@
 name = "dockerdiscord"
 version = "1.0.0"
 requires-python = ">=3.12"
+license = "MIT"
 # Runtime deps: edit requirements.in, then regenerate the hash-locked requirements.txt (see README).
 
 [dependency-groups]  # PEP 735: `pip install --group dev` (pip >= 25.1)
