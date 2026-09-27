@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Pinned to the exact interpreter the test suite runs on; bump deliberately.
-FROM python:3.12.14-slim-trixie AS build
+FROM python:3.14.7-slim-trixie AS build
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 RUN python -m venv /opt/venv
 COPY requirements.txt .
@@ -9,7 +9,7 @@ COPY requirements.txt .
 RUN /opt/venv/bin/pip install --require-hashes --only-binary=:all: -r requirements.txt \
  && /opt/venv/bin/pip uninstall --yes pip
 
-FROM python:3.12.14-slim-trixie
+FROM python:3.14.7-slim-trixie
 ENV PATH=/opt/venv/bin:$PATH PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 COPY --from=build /opt/venv /opt/venv
 WORKDIR /app

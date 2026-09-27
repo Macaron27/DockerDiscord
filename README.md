@@ -1,5 +1,7 @@
 # DockerDiscord
 
+[![CI](https://github.com/Macaron27/DockerDiscord/actions/workflows/ci.yml/badge.svg)](https://github.com/Macaron27/DockerDiscord/actions/workflows/ci.yml)
+
 A Discord bot that controls a homelab with slash commands and posts incident alerts with remediation buttons.
 
 | Command | What it does |
@@ -77,15 +79,15 @@ python3 -m venv .venv && .venv/bin/pip install --require-hashes -r requirements.
 ```
 
 ```bash
-.venv/bin/python -m pytest -q --cov=bot --cov-branch && .venv/bin/ruff check bot tests && .venv/bin/mypy
+.venv/bin/python -m pytest -q --cov && .venv/bin/ruff format --check bot tests && .venv/bin/ruff check bot tests && .venv/bin/mypy
 ```
 
-The tests fake Discord and Docker, so they need no network. That includes `tests/test_proxy_allowlist.py`, which runs the proxy regexes against the URLs docker-py really sends.
+CI (`.github/workflows/ci.yml`) runs the same checks on native amd64 and arm64 runners, builds the image for both, and smoke-tests it hardened like the compose file. Coverage below 90% fails the build. The tests fake Discord and Docker, so they need no network. That includes `tests/test_proxy_allowlist.py`, which runs the proxy regexes against the URLs docker-py really sends.
 
 **Dependencies:** `requirements.in` lists the direct pins. `requirements.txt` is the hash-locked lock for every platform, and the Dockerfile installs it wheels-only with `--require-hashes`. After changing `requirements.in`, regenerate it:
 
 ```bash
-.venv/bin/uv pip compile requirements.in --universal --python-version 3.12 --generate-hashes -o requirements.txt
+.venv/bin/uv pip compile requirements.in --universal --python-version 3.14 --generate-hashes -o requirements.txt
 ```
 
 ## First-run smoke test (on the real host)

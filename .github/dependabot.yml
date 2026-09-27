@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # Patch bumps only; a new Python minor (3.15) is a deliberate migration.
+      - dependency-name: python
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
+
+# pip is intentionally absent: requirements.txt is a hash-locked `uv pip compile` output.
+# Regenerate it by hand (README > Develop and test) when bumping requirements.in.

@@ -1,7 +1,7 @@
 [project]
 name = "dockerdiscord"
 version = "1.0.0"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 license = "MIT"
 # Runtime deps: edit requirements.in, then regenerate the hash-locked requirements.txt (see README).
 
@@ -24,12 +24,11 @@ faulthandler_timeout = 10
 faulthandler_exit_on_timeout = true
 filterwarnings = [
     "error::DeprecationWarning:bot",  # our own code must not rely on deprecated APIs
-    "ignore:'audioop' is deprecated:DeprecationWarning:discord.player",  # discord.py voice, unused
 ]
 
 [tool.ruff]
 line-length = 110
-target-version = "py312"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF"]
@@ -39,7 +38,15 @@ ignore = ["S101", "S104", "RUF001"]  # asserts for narrowing; 0.0.0.0 bind is in
 "tests/*" = ["S105", "S106"]
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 warn_unreachable = true
 files = ["bot"]
+
+[tool.coverage.run]
+branch = true
+source = ["bot"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true

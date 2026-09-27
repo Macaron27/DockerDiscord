@@ -20,3 +20,7 @@
 ## `pip download --python-version` evaluated markers against the host interpreter (2026-09-27)
 - **Error:** checking Linux cp312 wheels from a 3.14 venv tried to fetch `audioop-lts; python_version >= "3.13"`.
 - **Fix:** run `pip download --platform ... --python-version 3.12` from a real 3.12 interpreter (`uv python install 3.12`), or resolve with `uv pip compile --python-version`.
+
+## Fetched-page summary contradicted the source (2026-09-27)
+- **Error:** a WebFetch summary of GitHub's runner docs said arm64 Linux runners are private-repo only. The docs source (`github/docs` `data/reusables/actions/supported-github-runners.md`) lists `ubuntu-24.04-arm` under "Standard ... runners for public repositories", which are free.
+- **Fix:** before a summarized page drives a design decision, check the raw source (repo markdown, `action.yml` at the pinned SHA, package metadata).

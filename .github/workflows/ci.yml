@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Actions are pinned to full commit SHAs (tag in the comment); Dependabot keeps them current.
+jobs:
+  test:
+    name: test (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: amd64, runner: ubuntu-24.04 }
+          - { arch: arm64, runner: ubuntu-24.04-arm }
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            pyproject.toml
+      - name: Install hash-locked runtime deps + dev group
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r requirements.txt
+          python -m pip install --group dev
+      - name: Format
+        run: ruff format --check bot tests
+      - name: Lint
+        run: ruff check --output-format=github bot tests
+      - name: Types (mypy --strict)
+        run: mypy
+      - name: Tests + coverage floor
+        run: python -m pytest -q --cov --cov-report=term-missing
+
+  docker:
+    name: docker (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: amd64, platform: linux/amd64, runner: ubuntu-24.04 }
+          - { arch: arm64, platform: linux/arm64, runner: ubuntu-24.04-arm }
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Build image (native ${{ matrix.platform }})
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          load: true
+          push: false
+          tags: dockerdiscord:ci
+          cache-from: type=gha,scope=${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.arch }}
+      - name: Smoke test, hardened like docker-compose.yml
+        # With no config the entrypoint must fail fast: exit 2 + "config error".
+        run: |
+          set +e
+          out=$(docker run --rm --read-only --cap-drop ALL --security-opt no-new-privileges:true dockerdiscord:ci 2>&1)
+          code=$?
+          set -e
+          echo "$out"
+          [ "$code" -eq 2 ] || { echo "::error::expected exit code 2, got $code"; exit 1; }
+          grep -q "config error" <<<"$out" || { echo "::error::missing 'config error' message"; exit 1; }
+      - name: Image runs as non-root UID 10001
+        run: |
+          uid=$(docker run --rm --entrypoint python dockerdiscord:ci -c 'import os; print(os.getuid())')
+          [ "$uid" = "10001" ] || { echo "::error::container runs as UID $uid"; exit 1; }
+      - name: Validate docker-compose.yml
+        if: matrix.arch == 'amd64'
+        run: |
+          cp .env.example .env
+          DOCKER_GID=999 docker compose config --quiet
