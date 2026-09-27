@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.svg" alt="DockerDiscord: homelab ChatOps and self-healing Discord bot" width="100%">
+</p>
+
 # DockerDiscord
 
 [![CI](https://github.com/Macaron27/DockerDiscord/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Macaron27/DockerDiscord/actions/workflows/ci.yml?query=branch%3Amain)
