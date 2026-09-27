@@ -1,6 +1,11 @@
 # DockerDiscord
 
-[![CI](https://github.com/Macaron27/DockerDiscord/actions/workflows/ci.yml/badge.svg)](https://github.com/Macaron27/DockerDiscord/actions/workflows/ci.yml)
+[![CI](https://github.com/Macaron27/DockerDiscord/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Macaron27/DockerDiscord/actions/workflows/ci.yml?query=branch%3Amain)
+[![Top language](https://img.shields.io/github/languages/top/Macaron27/DockerDiscord?logo=python&logoColor=white&color=3776AB)](bot)
+[![Docker](https://img.shields.io/badge/Docker-compose_ready-2496ED?logo=docker&logoColor=white)](docker-compose.yml)
+[![Discord](https://img.shields.io/badge/Discord-discord.py_2.7-5865F2?logo=discord&logoColor=white)](https://discordpy.readthedocs.io/)
+[![Last commit](https://img.shields.io/github/last-commit/Macaron27/DockerDiscord)](https://github.com/Macaron27/DockerDiscord/commits/main)
+[![License: MIT](https://img.shields.io/github/license/Macaron27/DockerDiscord)](LICENSE)
 
 A Discord bot that controls a homelab with slash commands and posts incident alerts with remediation buttons.
 

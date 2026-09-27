@@ -24,3 +24,7 @@
 ## Fetched-page summary contradicted the source (2026-09-27)
 - **Error:** a WebFetch summary of GitHub's runner docs said arm64 Linux runners are private-repo only. The docs source (`github/docs` `data/reusables/actions/supported-github-runners.md`) lists `ubuntu-24.04-arm` under "Standard ... runners for public repositories", which are free.
 - **Fix:** before a summarized page drives a design decision, check the raw source (repo markdown, `action.yml` at the pinned SHA, package metadata).
+
+## zsh: loop variable `path` wiped `$PATH` (2026-09-27)
+- **Error:** `for path in ...` in a zsh command made `curl`, `python3` and `rm` "command not found". zsh ties the `path` array to `$PATH`.
+- **Fix:** never use `path` (or `cdpath`, `fpath`, `manpath`) as a variable name in zsh; use `rel`, `p`, etc.
