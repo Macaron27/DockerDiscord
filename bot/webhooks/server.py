@@ -79,7 +79,7 @@ def make_app(secret: str, on_incident: OnIncident) -> web.Application:
             )
         try:
             payload = await request.json()  # bodies over MAX_BODY are rejected with 413 by aiohttp
-        except (json.JSONDecodeError, UnicodeDecodeError):
+        except json.JSONDecodeError, UnicodeDecodeError:
             return web.json_response({"error": "body must be JSON"}, status=400)
         incidents = parse_payload(payload) if isinstance(payload, dict) else None
         if incidents is None:
